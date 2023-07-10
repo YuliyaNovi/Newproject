@@ -1,6 +1,8 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, request
 
 app = Flask(__name__)
+
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -8,7 +10,50 @@ def index():
            '<a href="/coutdown">Отсчет</a><br> ' \
            '<a href="/slogan">Слоган </a>'
 
-@app.route('/slideshow') # карусель
+@app.route('/form_sample', methods=['GET','POST'])
+def form_sample():
+    if request.method == 'GET':
+        return f"""<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <title>Форма</title>
+                <link rel="stylesheet" type="text/css" href ="{url_for('static', filename='css/style.css')}">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+            </head>
+            <body>
+            <h1>Форма для регистрации<h2>
+            <div class="container">
+            <form class="login_form" method="post">
+            <input type="text" class="form-control" name="fname" placeholder="Фамилия"></br>
+            <input type="text" class="form-control" name="sname" placeholder="Имя"></br>
+            <input type="email" class="form-control" name="email" placeholder="E-mail"></br>
+            <input type="password" class="form-control" name="password" placeholder="Password"></br>
+            
+            <div class = "form-group">
+            <label for="classSelect">Ваше образование</label>
+            <select class="form-control" id="classSelect" name="profession">
+            <option>Среднее</option>
+            <option>Высшее</option>
+            </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить</button>
+            
+            </form>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+            </body>
+            </html>"""
+    elif request == 'POST':
+        print(request.form['fname'])
+        print(request.form['sname'])
+        return 'Форма отправлена'
+
+
+
+
+@app.route('/slideshow')  # карусель
 def slideshow():
     return f"""<!DOCTYPE html>
     <html lang="en">
@@ -59,6 +104,7 @@ def coutdown():
     lst.append('Start!!!')
     return '<br>'.join(lst)
 
+
 @app.route('/poster')
 def poster():
     return f"""<!DOCTYPE html>
@@ -66,18 +112,19 @@ def poster():
 <head>
     <meta charset="UTF-8">
     <title>Постер</title>
-    <link rel="stylesheet" type="text/css" href ="{url_for('static', filename = 'css/style.css')}">
+    <link rel="stylesheet" type="text/css" href ="{url_for('static', filename='css/style.css')}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 <body>
 <h1 class="red">Постер к фильму</h1>
-<img src="{url_for('static', filename = 'images/admiral.jpeg')}" alt ="Здесь должна была быть картинка, но не нашлась" >
+<img src="{url_for('static', filename='images/admiral.jpeg')}" alt ="Здесь должна была быть картинка, но не нашлась" >
 <p>И крепка, как смерть, любовь!</p>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 </body>
 </html>"""
+
 
 @app.route('/nekrasov/<username>')
 def nekrasov(username):
@@ -107,6 +154,7 @@ def nekrasov(username):
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     </body>
     </html>"""
+
 
 @app.route('/variants/<int:var>')  # по умолчанию str формат, поэтому int
 def variants(var):
@@ -154,5 +202,3 @@ def variants(var):
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
-
-
