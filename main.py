@@ -1,13 +1,39 @@
 from flask import Flask, url_for, request, redirect
-
+from flask import render_template
+import json
 app = Flask(__name__)
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return redirect('/load_photo')  # безусловный редирект, сразу кидает пользователя на страницу с главной
+#    user = "Слушатель"
+    param = {}
+    param['username'] = 'Слушатель'
+    param['title'] = 'Работа с шаблонами'
+    return render_template('index.html', **param)  # * список **словарь
+#  return render_template('index.html', title='Работа с шаблонами', username=user)
 
+#  return redirect('/load_photo')  # безусловный редирект, сразу кидает пользователя на страницу с главной
+
+@app.route('/var_test')
+def var_test():
+    return render_template('var_test.html', title='Определяем переменную внутри HTML')
+
+@app.route('/odd_even')
+def odd_even():
+    return render_template('odd_even.html', number=3)
+
+@app.route('/news')
+def news():
+    with open('news.json', 'rt', encoding='utf-8') as f:
+        news_list = json.loads(f.read())
+    return render_template('news.html', title='Новости', news=news_list)
+
+# @app.route('/news')
+# def news():
+#     lst = ['ANN', 'TOM', 'BOB']
+#     return render_template('news.html', title="FOR", news=lst)
 
 @app.route('/slogan')
 def slogan():
@@ -40,7 +66,8 @@ def load_photo():
         </form>
         """
     elif request.method == 'POST':
-        f = request.files['file']
+        f = request.files['file']  # если file нет, то будет исключение
+        # request.form.get('file') - исключения не будет выброшено, лучше этот способ
         f.save('./static/images/loaded.png')
         return '<h1>Файл у вас на сервере</h1>'
 
