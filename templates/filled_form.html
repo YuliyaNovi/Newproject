@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<img src="../static/images/loaded.png" alt="Фото">
+{% set lst = ['Фамилия','Имя','Email','Пароль','Образование', 'Пол','О себе'] %}
+{% for value in data.values() %}
+{{ lst[loop.index0] }} - {{ value }}<br>
+{% endfor %}
+<!--<table>
+{% for key, value in data.items() %}
+   <tr>
+        <th> {{ key }} </th>
+        <td> {{ value }} </td>
+   </tr>
+{% endfor %}
+</table>
+
+
+<table class="table">
+  <thead>
+    <tr>
+        {% for key in data.keys() %}
+      <th scope="col">{{ key }}</th>
+        {% endfor %}
+    </tr>
+
+  </thead>
+  <tbody>
+
+   <tr>{% for value in data.values() %}
+       <td scope="row">{{ value }}  </td>
+       {% endfor %}
+   </tr>
+
+
+  </tbody>
+</table>
+-->
+
+{% endblock %}
