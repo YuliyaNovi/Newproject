@@ -3,7 +3,7 @@ from flask import render_template
 import json
 import requests
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'too short key'
 
 
 
