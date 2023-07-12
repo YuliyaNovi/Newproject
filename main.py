@@ -16,6 +16,16 @@ def index():
 
 #  return redirect('/load_photo')  # безусловный редирект, сразу кидает пользователя на страницу с главной
 
+@app.route('/weather_form', methods=['GET', 'POST'])
+def weather_form():
+    if request.method == 'GET':
+            return render_template('weather_form.html', title="Погода")
+    elif request.method == 'POST':
+        town = request.form.get('town')
+        return render_template('weather.html', title=f'Погода в городе{town}', town=town)
+
+
+
 @app.route('/var_test')
 def var_test():
     return render_template('var_test.html', title='Определяем переменную внутри HTML')
