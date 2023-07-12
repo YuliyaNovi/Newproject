@@ -1,7 +1,10 @@
 from flask import Flask, url_for, request, redirect
 from flask import render_template
 import json
+import requests
 app = Flask(__name__)
+
+
 
 
 @app.route('/')
@@ -15,6 +18,13 @@ def index():
 #  return render_template('index.html', title='Работа с шаблонами', username=user)
 
 #  return redirect('/load_photo')  # безусловный редирект, сразу кидает пользователя на страницу с главной
+@app.errorhandler(404)
+def http_404_error(error):
+    return redirect('/error404')
+
+@app.route('/error404')
+def well():  # колодец
+    return render_template('well.html')
 
 @app.route('/weather_form', methods=['GET', 'POST'])
 def weather_form():
@@ -22,7 +32,21 @@ def weather_form():
             return render_template('weather_form.html', title="Погода")
     elif request.method == 'POST':
         town = request.form.get('town')
-        return render_template('weather.html', title=f'Погода в городе{town}', town=town)
+        data = {}
+        key = '6d1cbcd7f1f15faea7b3accc84da2c51'
+        url = 'http://api.openweathermap.org/data/2.5/weather'
+        params = {'APPID': key, 'q': town, 'units': 'metric'}
+        result = requests.get(url, params=params)
+        weather = result.json()  # превратить ответ в формат json
+        code = weather['cod']  # если города нет, поймать ошибку
+        icon = weather['weather'][0]['icon']
+        temp = int(weather['main']['temp'])
+        vlag = weather['main']['humidity']
+        data['code'] = code  # внесем в пустой словарь
+        data['icon'] = icon
+        data['temp'] = temp
+
+        return render_template('weather.html', title=f'Погода в городе{town}', town=town, data=weather, icon=icon, temp=temp, vlag=vlag)
 
 
 

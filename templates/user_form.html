@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-
-    <form class="login_form" method="post" enctype="multipart/form-data">
+<form class="login_form" method="post" enctype="multipart/form-data">
+<div class="row">
+    <div class="col">
         <input type="text" class="form-control" name="fname" placeholder="Фамилия"><br>
+          </div>
+<div class="col">
         <input type="text" class="form-control" name="sname" placeholder="Имя"><br>
-        <input type="email" class="form-control" name="email" placeholder="E-mail"><br>
-        <input type="password" class="form-control" name="password" placeholder="Password"><br>
-
+      </div>  </div>
+<div class="row">    <div class="col">
+       <input type="email" class="form-control" name="email" placeholder="E-mail"><br></div>
+     <div class="col">    <input type="password" class="form-control" name="password" placeholder="Password"><br>      </div>  </div>
+<div class="row">
+     <div class="col">
         <!-- Список образования -->
         <div class="form-group">
             <label for="classSelect">Ваше образование</label>
@@ -14,8 +20,8 @@
                 <option>Среднее</option>
                 <option>Высшее</option>
             </select>
-        </div>
-
+        </div> </div>
+    <div class="col">
         <!-- Выбор пола -->
         <div class="form-group">
             <label for="form-check">Укажите пол</label>
@@ -27,8 +33,8 @@
                 <input type="radio" class="form-check-input" name="sex" id="female" value="female">
                 <label class="form-check-label" for="female"> Женский</label>
             </div>
+        </div></div>
         </div>
-
         <!-- Текстовое поле -->
         <label for="about"> Немного о себе</label>
         <textarea class="form-control id="about" name="about" rows=3>Введите текст </textarea><br>

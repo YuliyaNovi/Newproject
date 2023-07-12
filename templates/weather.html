@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>
-{{town}}
+    {{town}}
 </h1>
+<!--<h2>{{data}}</h2>-->
+<img width="100" height="100" src="https://openweathermap.org/img/wn/{{icon}}@2x.png">
+<h2> Температура в городе {{town}} сейчас {{temp}} &deg C</h2>
+{% if vlag > 60 %}
+<h2> Высокий уровень влажности{{vlag}} %</h2>
+{% elif vlag < 40  %}
+<h2> Низкий уровень влажности {{vlag}} %</h2>
+{% else %}
+<h2> Оптимальная влажность {{vlag}} %</h2>
+{% endif %}
 
 {% endblock %}
