@@ -14,3 +14,4 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Запомнить меня')
     #   file = FileField('Файл')
     submit = SubmitField('Войти')
+
