@@ -5,6 +5,8 @@ import requests
 from loginform import LoginForm
 from data import db_session
 from data.users import User
+from data.news import News
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'too short key'
 app.config['SQLALCHEMY_DATABASE_URL'] = 'sqlite:///db/news.sqlite'
@@ -152,12 +154,54 @@ def poster():
 
 if __name__ == '__main__':
     db_session.global_init('db/news.sqlite')
- #   app.run(host='127.0.0.1', port=5000, debug=True)
+    #   app.run(host='127.0.0.1', port=5000, debug=True)
     db_sess = db_session.create_session()
-    user = User()
-    user.name = 'Mark'
-    user.about = 'Plumber'
-    user.email = 'mark@mail.ru'
 
-    db_sess.add(user)
-    db_sess.commit()
+    # вывести все новости пользователя
+    # user = db_sess.query(User).filter(User.id == 1).first()
+    # for user in user.news:
+    #     print(user)
+
+    # добавим новость по ид
+    # id = db_sess.query(User).filter(User.id == 1).first()
+    # print(id.id)
+    # news = News(title="Новости от Владимира №2", content='Больше не опаздываю', user_id=id.id, is_private=False)
+    # db_sess.add(news)
+    # db_sess.commit()
+    # u = db_sess.query(User).filter(User.id == 1).first()
+    # news = News(title="Новости от Владимира №4", content='Пошел на обед', is_private=False)
+    # u.news.append(news)
+    # db_sess.commit()
+
+
+    # user = db_sess.query(User).first()
+    # print(user.name)
+
+    # users = db_sess.query(User).all()
+    # for user in users:
+        # print(user.name, user.email)
+        # print(user)  # метод __repr__
+    #
+    # users = db_sess.query(User).filter(User.email.notilike('%v%'))  # ilike - i не учитывает регистр
+    # #  в запросе | - или  & - и
+    # for user in users:
+    #     print(user)
+
+    # обновление
+    # user = db_sess.query(User).filter(User.id == 1).first()
+    # user.name ="Vladimir"
+    # print(user.name)
+
+    # удалим
+    # user = db_sess.query(User).filter(User.id == 2).first()
+    # db_sess.delete(user)
+    # db_sess.commit()
+
+#  создание пользователя в БД
+    # user = User()
+    # user.name = 'Markus'
+    # user.about = 'Plumber9'
+    # user.email = 'markus@mail.ru'
+    #
+    # db_sess.add(user)
+    # db_sess.commit()
