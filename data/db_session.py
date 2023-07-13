@@ -26,4 +26,4 @@ def global_init(db_file):
 
 def create_session() -> Session:  # аннотатор функций, возвращает сессию
     global created
-    return created
+    return created()

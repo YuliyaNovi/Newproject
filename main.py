@@ -4,6 +4,7 @@ import json
 import requests
 from loginform import LoginForm
 from data import db_session
+from data.users import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'too short key'
 app.config['SQLALCHEMY_DATABASE_URL'] = 'sqlite:///db/news.sqlite'
@@ -151,4 +152,12 @@ def poster():
 
 if __name__ == '__main__':
     db_session.global_init('db/news.sqlite')
-    app.run(host='127.0.0.1', port=5000, debug=True)
+ #   app.run(host='127.0.0.1', port=5000, debug=True)
+    db_sess = db_session.create_session()
+    user = User()
+    user.name = 'Mark'
+    user.about = 'Plumber'
+    user.email = 'mark@mail.ru'
+
+    db_sess.add(user)
+    db_sess.commit()
