@@ -1,5 +1,5 @@
 from flask import Flask, url_for, request, redirect
-from flask import render_template
+from flask import render_template, make_response
 import json
 import requests
 from loginform import LoginForm
@@ -58,6 +58,17 @@ def login():
         return redirect('/success')
     return render_template('login.html', title='Авторизация', form=form)
 
+
+@app.route('/cookie_test')
+def cookie_test():
+    visit_count = int(request.cookies.get('visit_count', 0))
+    if visit_count:
+        res = make_response(f'Были тут {visit_count + 1} раз')
+        res.set_cookie('visit_count', str(visit_count+1), max_age=60*60*24*365*2)
+    else:
+        res = make_response('Вы впервые тут за 2 года')
+        res.set_cookie('visit_count', '1', max_age=60*60*24*365*2)
+    return res
 
 @app.route('/success')
 def success():
