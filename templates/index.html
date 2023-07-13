@@ -1,4 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="red"> Hello, {{ username }}!</h1>
+
+<h1> Новости </h1>
+{% for item in news %}
+<div class="col border rounded">
+    <h2>{{ item.title }} </h2>
+    <div>{{ item.content }}</div>
+    <div>{{ item.user.name }} -{{ item.create_date.strftime("%Y-%m-%d %H:%M")}}</div>
+
+</div>
+{% endfor %}
+
 {% endblock %}

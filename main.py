@@ -15,11 +15,9 @@ app.config['SQLALCHEMY_DATABASE_URL'] = 'sqlite:///db/news.sqlite'
 @app.route('/')
 @app.route('/index')
 def index():
-    #    user = "Слушатель"
-    param = {}
-    param['username'] = 'Слушатель'
-    param['title'] = 'Расширяем шаблоны'
-    return render_template('index.html', **param)  # * список **словарь
+    db_sess = db_session.create_session()
+    news = db_sess.query(News).filter(News.is_private != True)
+    return render_template('index.html', title='Новости', news=news)  # * список **словарь
 
 
 #  return render_template('index.html', title='Работа с шаблонами', username=user)
@@ -154,8 +152,8 @@ def poster():
 
 if __name__ == '__main__':
     db_session.global_init('db/news.sqlite')
-    #   app.run(host='127.0.0.1', port=5000, debug=True)
-    db_sess = db_session.create_session()
+    app.run(host='127.0.0.1', port=5000, debug=True)
+    #db_sess = db_session.create_session()
 
     # вывести все новости пользователя
     # user = db_sess.query(User).filter(User.id == 1).first()
