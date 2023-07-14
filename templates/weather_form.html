@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+{% if current_user.is_authenticated %}
+<h1 align="center">Здравствуйте, {{ current_user.name}}</h1>
+{% endif %}
 <form method="post" class="login_form">
     <input type="text" name="town" class="form-control" placeholder="Введите город"><br>
     <button type="submit" class="btn btn-primary">Показать погоду</button>

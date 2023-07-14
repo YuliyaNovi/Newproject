@@ -2,6 +2,8 @@ from flask import Flask, request, redirect
 from flask import render_template, make_response, session
 import json
 import requests
+
+from forms.add_news import NewsForm
 from loginform import LoginForm
 from data import db_session
 from data.users import User
@@ -161,11 +163,23 @@ def odd_even():
     return render_template('odd_even.html', number=3)
 
 
-@app.route('/news')
-def news():
-    with open('news.json', 'rt', encoding='utf-8') as f:
-        news_list = json.loads(f.read())
-    return render_template('news.html', title='Новости', news=news_list)
+@app.route('/news', methods=['GET', 'POST'])
+@login_required
+def add_news():
+    # with open('news.json', 'rt', encoding='utf-8') as f:
+    #     news_list = json.loads(f.read())
+    form = NewsForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = News()  # ORM
+        news.title = form.title.data
+        news.content = form.content.data
+        news.is_private = form.is_private.data
+        current_user.news.append(news)
+        db_sess.merge(current_user)   # слияние сессии с текущим пользователем
+        db_sess.commit()
+        return redirect('/')
+    return render_template('news.html', title='Добавление новости', form=form)
 
 
 # @app.route('/news')

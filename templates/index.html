@@ -2,13 +2,17 @@
 {% block content %}
 
 <h1> Новости </h1>
+<div class="container">
+
 {% for item in news %}
 <div class="col border rounded">
     <h2>{{ item.title }} </h2>
     <div>{{ item.content }}</div>
     <div>{{ item.user.name }} -{{ item.create_date.strftime("%Y-%m-%d %H:%M")}}</div>
 
+</div>{% endfor %}
+{% if current_user.is_authenticated %}
+<br><a href="news" class="btn btn-secondary">Добавить новость</a>
+{% endif %}
 </div>
-{% endfor %}
-
 {% endblock %}
