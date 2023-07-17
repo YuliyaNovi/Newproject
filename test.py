@@ -6,7 +6,7 @@ from requests import get, post, delete
 # print(get('http://127.0.0.1:5000/api/news/q').json())
 
 # Печатать в консоль, тестируем API post
-# print(post('http://127.0.0.1:5000/api/news').json())
+# print(post('http://127.0.0.1:5000/api/news', json='').json())
 
 
 # new_rl = {'title': 'Заголовок API',
