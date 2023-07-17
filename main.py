@@ -1,11 +1,11 @@
-from flask import Flask, request, redirect, abort
+from flask import Flask, request, redirect, abort, jsonify
 from flask import render_template, make_response, session
 import json
 import requests
 
 from forms.add_news import NewsForm
 from loginform import LoginForm
-from data import db_session
+from data import db_session, news_api
 from data.users import User
 from data.news import News
 from forms.user import RegisterForm
@@ -60,6 +60,15 @@ def http_404_error(error):
 @app.route('/error404')
 def well():  # колодец
     return render_template('well.html')
+
+@app.errorhandler(404)
+def http_404_error(error):
+    return make_response(jsonify({'error': 'Новости не найдены'}), 404)
+
+
+@app.errorhandler(400)
+def http_400_handler(error):
+    return make_response(jsonify({'error': 'Некорректный запрос'}), 400)
 
 
 @app.errorhandler(401)
@@ -284,6 +293,8 @@ def post_form():
 
 if __name__ == '__main__':
     db_session.global_init('db/news.sqlite')
+    app.register_blueprint(news_api.blueprint)
+
     app.run(host='127.0.0.1', port=5000, debug=True)
     # db_sess = db_session.create_session()
 
