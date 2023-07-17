@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, abort
 from flask import render_template, make_response, session
 import json
 import requests
@@ -25,14 +25,14 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)  # со�
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
+    return db_sess.get(User, user_id)
+
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect('/')
-
 
 
 @app.route('/')
@@ -61,9 +61,11 @@ def http_404_error(error):
 def well():  # колодец
     return render_template('well.html')
 
+
 @app.errorhandler(401)
 def http_401_handler(error):
     return redirect('/login')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -94,7 +96,8 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect('/')
-        return render_template('login.html', message='Неверный логин или пароль', title='Повторная авторизация', form=form)
+        return render_template('login.html', message='Неверный логин или пароль', title='Повторная авторизация',
+                               form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
 
@@ -176,10 +179,52 @@ def add_news():
         news.content = form.content.data
         news.is_private = form.is_private.data
         current_user.news.append(news)
-        db_sess.merge(current_user)   # слияние сессии с текущим пользователем
+        db_sess.merge(current_user)  # слияние сессии с текущим пользователем
         db_sess.commit()
         return redirect('/')
     return render_template('news.html', title='Добавление новости', form=form)
+
+
+@app.route('/news/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_news(id):
+    form = NewsForm()
+    if request.method == 'GET':
+        db_sess = db_session.create_session()
+        news = db_sess.query(News).filter(News.id == id, News.user == current_user).first()
+        if news:
+            form.title.data = news.title
+            form.content.data = news.content
+            form.is_private.data = news.is_private
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = db_sess.query(News).filter(News.id == id,
+                                          News.user == current_user).first()
+        if news:
+            news.title = form.title.data
+            news.content = form.content.data
+            news.is_private = form.is_private.data
+            db_sess.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('news.html', title='Редактирование новости',
+                           form=form)
+
+
+@app.route('/news_del/<int:id>', methods=['GET', 'POST'])
+@login_required
+def news_delete(id):
+    db_sess = db_session.create_session()
+    news = db_sess.query(News).filter(News.id == id, News.user == current_user).first()
+    if news:
+        db_sess.delete(news)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
 
 
 # @app.route('/news')
