@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Форма для регистрации</h1>
+
+</head>
+  <body style="background-color:lavender;">
+  <div class="container">
+<h1 style="color: blue;">Форма для регистрации</h1>
 <div class="container">
 <form method="post">
     {{ form.hidden_tag() }}
@@ -60,5 +64,5 @@
     <p> {{ form.submit(type="submit", class="btn btn-primary")}}</p>
 
     {{ message }}
-</form></div>
+</form></div></div>
 {% endblock %}>

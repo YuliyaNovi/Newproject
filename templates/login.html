@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+
+</head>
+  <body style="background-color:lavender;">
 <div class="container">
-    <h1>Авторизация</h1>
+    <h1 style="color: blue;">Авторизация</h1>
     <form method="post">
         {{ form.hidden_tag() }}
         <p> {{ form.email.label }}
@@ -23,4 +26,5 @@
         <div>{{ message }}</div>
     </form>
 </div>
+
 {% endblock %}

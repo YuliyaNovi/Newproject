@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 align="center"> Новости </h1>
+<h1 align="center" style="color: olive;"> Новости </h1>
 <div class="container">
 
 {% for item in news %}
 <div class="col border rounded ">
-    <h2>{{ item.title }} </h2>
+    <h2 style="color:blue;">{{ item.title }} </h2>
     <div>{{ item.content }}</div>
     <div>{{ item.user.name }} - {{ item.create_date.strftime("%d-%m-%Y %H:%M")}}</div>
  {% if current_user.is_authenticated and current_user == item.user %}
@@ -16,9 +16,12 @@
            onclick="return confirm('Вы действительно хотите удалить новость &laquo;{{item.title}}&raquo;?')">Удалить</a>
     {% endif %}
 <br><br></div>
+
 {% endfor %}
 {% if current_user.is_authenticated %}
     <br><a href="news" class="btn btn-secondary">Добавить новость</a><br><br>
 {% endif %}
 </div>
+
+<p class="text-center text-body-secondary">© 2023 Company, Inc</p>
 {% endblock %}
